@@ -1,6 +1,117 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+/* ===== BASE ===== */
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ===== HOME ===== */
+
+.home {
+  padding: 1rem;
+}
+
+.welcome {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== HERO ===== */
+
+.hero {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.hero-text {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem;
+  max-width: 60%;
+}
+
+.hero-text h2 {
+  color: #00a6c7;
+  margin: 0 0 0.25rem;
+}
+
+.hero-text p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #00a6c7;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* ===== REVIEWS ===== */
+
+.reviews h2,
+.upgrades h2 {
+  font-size: 1.3rem;
+  margin-top: 2rem;
+}
+
+.reviews ul {
+  padding-left: 1.2rem;
+}
+
+/* ===== UPGRADES ===== */
+
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.upgrade-grid figure {
+  text-align: center;
+}
+
+.upgrade-grid img {
+  background: #00a6c7;
+  padding: 0.5rem;
+}
+
+figcaption {
+  margin-top: 0.25rem;
+  color: #004c5c;
+  text-decoration: underline;
+}
+
+/* ===== DESKTOP ===== */
+
+@media (min-width: 768px) {
+  .hero {
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-text {
+    position: static;
+    max-width: 40%;
+  }
+
+  .hero-image {
+    flex: 1;
+  }
+
+  .upgrade-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
