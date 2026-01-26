@@ -1,10 +1,27 @@
-<% if (title) { %>
-  <h1><%= title %></h1>
-<% } else { %>
-  <h1>Error</h1>
-<% } %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <div id="wrapper">
+    <%- include('../partials/header') %>
+    <%- include('../partials/navigation') %>
+    
+    <main>
+      <% if (title) { %>
+        <h1><%= title %></h1>
+      <% } else { %>
+        <h1>Error</h1>
+      <% } %>
 
-<div class="error-container">
-  <p class="error-message"><%= message %></p>
-  <p><a href="/">Return to Home</a></p>
-</div>
+      <div class="error-container">
+        <p class="error-message"><%= message %></p>
+        <p><a href="/" class="btn-home">Return to Home</a></p>
+      </div>
+    </main>
+    
+    <%- include('../partials/footer') %>
+  </div>
+</body>
+</html>

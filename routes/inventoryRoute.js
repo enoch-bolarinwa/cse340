@@ -11,3 +11,4 @@ router.get("/detail/:invId", utilities.handleErrors(invController.buildByInvId))
 router.get("/trigger-error", utilities.handleErrors(invController.triggerError));
 
 module.exports = router;
+
