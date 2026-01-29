@@ -11,6 +11,58 @@ header, footer {
   padding: 1rem;
 }
 
+/* Login Form Styles */
+#loginForm {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+}
+
+#loginForm .form-group {
+  margin-bottom: 1.5rem;
+}
+
+#loginForm label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--dark-grey);
+}
+
+#loginForm input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+#loginForm input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+#loginForm button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+#loginForm p {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#loginForm a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+#loginForm a:hover {
+  text-decoration: underline;
+}
+
 .account-link {
   float: right;
   font-size: 0.9rem;
@@ -34,6 +86,8 @@ header, footer {
   padding: 1rem;
   text-align: center;
 }
+
+
 
 .feature {
   display: flex;
