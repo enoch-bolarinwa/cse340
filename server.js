@@ -34,6 +34,9 @@ app.get("/", function(req, res){
   res.render("index", { title: "Home" })
 })
 
+// Inventory routes
+app.use("/inv", inventoryRoute)
+
 
 /* ***********************
  * Local Server Information

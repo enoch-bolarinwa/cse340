@@ -4,6 +4,9 @@ const Util = {};
 
 
 Util.getNav = async function (req, res, next) {
+
+console.log(data)
+
   let data = await invModel.getClassifications();
   let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
