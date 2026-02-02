@@ -1,36 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%- include('../partials/head') %>
-</head>
-<body>
-  <div id="wrapper">
-    <%- include('../partials/header') %>
-    <%- include('../partials/navigation') %>
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<form id="loginForm" action="/account/login" method="post">
+  <fieldset>
+    <legend>Login Information</legend>
     
-    <main>
-      <h1><%= title %></h1>
-      
-      <%- messages() %>
-      
-      <form id="loginForm" action="/account/login" method="post">
-        <div class="form-group">
-          <label for="account_email">Email:</label>
-          <input type="email" id="account_email" name="account_email" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="account_password">Password:</label>
-          <input type="password" id="account_password" name="account_password" required>
-        </div>
-        
-        <button type="submit">Login</button>
-        
-        <p>No account? <a href="/account/register">Sign-up</a></p>
-      </form>
-    </main>
+    <label for="account_email">Email Address:</label>
+    <input 
+      type="email" 
+      id="account_email" 
+      name="account_email"
+      required
+      placeholder="Enter your email address"
+    >
     
-    <%- include('../partials/footer') %>
-  </div>
-</body>
-</html>
+    <label for="account_password">Password:</label>
+    <input 
+      type="password" 
+      id="account_password" 
+      name="account_password"
+      required
+      placeholder="Enter your password"
+      pattern=".{12,}"
+      title="Password must be at least 12 characters"
+    >
+    
+    <button type="submit">Login</button>
+  </fieldset>
+</form>
+
+<p class="register-link">No account? <a href="/account/register" title="Click to register">Sign-up</a></p>
