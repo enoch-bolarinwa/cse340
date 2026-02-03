@@ -10,6 +10,9 @@ async function buildLogin(req, res, next) {
   res.render("account/login", {
     title: "Login",
     nav,
+    account_firstname: "",   
+    account_lastname: "",    
+    account_email: "",       
   });
 }
 

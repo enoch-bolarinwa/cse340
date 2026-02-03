@@ -1,0 +1,12 @@
+<%# Content Heading - displays the classification name as the page title %>
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%# Message Block - displays flash messages if present %>
+<%# messages() %>
+
+<%# Inventory Items Display - shows the grid of vehicles %>
+<%- grid %>
