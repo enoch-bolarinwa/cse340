@@ -2,6 +2,7 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 let pool;
+
 if (process.env.NODE_ENV == "development") {
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -10,7 +11,6 @@ if (process.env.NODE_ENV == "development") {
     },
   });
 
-  // Added for troubleshooting queries
   module.exports = {
     async query(text, params) {
       try {

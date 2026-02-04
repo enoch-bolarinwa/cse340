@@ -10,9 +10,8 @@ async function buildLogin(req, res, next) {
   res.render("account/login", {
     title: "Login",
     nav,
-    account_firstname: "",   
-    account_lastname: "",    
-    account_email: "",       
+    errors: null,        
+    account_email: "",   
   });
 }
 
@@ -25,6 +24,9 @@ async function buildRegister(req, res, next) {
     title: "Registration",
     nav,
     errors: null,
+    account_firstname: "",
+    account_lastname: "",
+    account_email: "",
   });
 }
 
@@ -34,13 +36,10 @@ async function buildRegister(req, res, next) {
 async function registerAccount(req, res) {
   let nav = await utilities.getNav();
 
-  // Collect incoming data from req.body
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
-  // Hash the password before storing
   let hashedPassword;
   try {
-    // regular password and cost (salt is generated automatically)
     hashedPassword = await bcrypt.hashSync(account_password, 10);
   } catch (error) {
     req.flash("notice", 'Sorry, there was an error processing the registration.');
@@ -48,11 +47,14 @@ async function registerAccount(req, res) {
       title: "Registration",
       nav,
       errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
     });
+    return;
   }
 
-  // Store the new account with the hashed password
-  try {                                                    // ← THIS WAS MISSING
+  try {
     const regResult = await accountModel.accountRegister(
       account_firstname,
       account_lastname,
@@ -60,16 +62,30 @@ async function registerAccount(req, res) {
       hashedPassword
     );
 
-    if (regResult) {                                       // ← CHANGED result TO regResult
+    if (regResult) {
       req.flash("notice", 'Congratulations, your account has been created. Please log in.');
       res.redirect("/account/login");
     } else {
       req.flash("notice", 'Sorry, registration failed. Please try again.');
-      res.redirect("/account/register");
+      res.status(501).render("account/register", {
+        title: "Registration",
+        nav,
+        errors: null,
+        account_firstname,
+        account_lastname,
+        account_email,
+      });
     }
-  } catch (error) {                                        // ← NOW catch has a matching try
+  } catch (error) {
     req.flash("notice", 'Sorry, registration failed. Please try again.');
-    res.redirect("/account/register");
+    res.status(500).render("account/register", {
+      title: "Registration",
+      nav,
+      errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
+    });
   }
 }
 
