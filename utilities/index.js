@@ -109,8 +109,8 @@ Util.buildVehicleDetailHTML = async function(vehicle) {
   const formattedMileage = new Intl.NumberFormat('en-US').format(vehicle.inv_miles);
   detailHTML += `<p class="vehicle-mileage"><strong>Mileage:</strong> ${formattedMileage} miles</p>`;
   
-  detailHTML += '</div>'; // Close vehicle-info
-  detailHTML += '</div>'; // Close container
+  detailHTML += '</div>'; 
+  detailHTML += '</div>'; 
   
   return detailHTML;
 };
