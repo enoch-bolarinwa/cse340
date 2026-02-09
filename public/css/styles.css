@@ -1,3 +1,25 @@
+:root {
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-headline: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  /* colors */
+  --primary-color: #f0a868;
+  --secondary-color: #525b0f;
+  --tertiary-color: #8a470c;
+  --light-grey: #d0d0d0;
+  --dark-grey: #303030;
+
+  /* sizes */
+  --font-base: 18px;
+  --small-font: 0.8em;
+  --large-font: 1.2em;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
@@ -11,56 +33,19 @@ header, footer {
   padding: 1rem;
 }
 
-/* Login Form Styles */
-#loginForm {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border: 1px solid var(--light-grey);
-  border-radius: 8px;
-}
-
-#loginForm .form-group {
-  margin-bottom: 1.5rem;
-}
-
-#loginForm label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: var(--dark-grey);
-}
-
-#loginForm input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--light-grey);
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-#loginForm input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
-#loginForm button {
-  width: 100%;
-  margin-top: 1rem;
-}
-
-#loginForm p {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-#loginForm a {
-  color: var(--secondary-color);
+/* Admin Link in Navigation */
+.admin-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #dc3545;
+  color: white;
   text-decoration: none;
+  border-radius: 4px;
+  margin-left: 1rem;
 }
 
-#loginForm a:hover {
-  text-decoration: underline;
+.admin-link:hover {
+  background-color: #c82333;
 }
 
 /* Login Form Styles */
@@ -329,6 +314,99 @@ ul.notice li {
   text-decoration: underline;
 }
 
+/* Add Classification/Inventory Form Styles */
+#addClassificationForm,
+#addInventoryForm {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#addClassificationForm fieldset,
+#addInventoryForm fieldset {
+  border: 2px solid var(--light-grey);
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 0;
+}
+
+#addClassificationForm legend,
+#addInventoryForm legend {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--secondary-color);
+  padding: 0 1rem;
+}
+
+.form-instructions {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  color: #856404;
+}
+
+#addClassificationForm label,
+#addInventoryForm label {
+  display: block;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--dark-grey);
+}
+
+#addClassificationForm input,
+#addClassificationForm select,
+#addInventoryForm input,
+#addInventoryForm select,
+#addInventoryForm textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+}
+
+#addClassificationForm input:focus,
+#addClassificationForm select:focus,
+#addInventoryForm input:focus,
+#addInventoryForm select:focus,
+#addInventoryForm textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(240, 168, 104, 0.1);
+}
+
+#addInventoryForm textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+#addClassificationForm button,
+#addInventoryForm button {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#addClassificationForm button:hover,
+#addInventoryForm button:hover {
+  background-color: var(--tertiary-color);
+}
+
 .account-link {
   float: right;
   font-size: 0.9rem;
@@ -352,8 +430,6 @@ ul.notice li {
   padding: 1rem;
   text-align: center;
 }
-
-
 
 .feature {
   display: flex;

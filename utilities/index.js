@@ -27,7 +27,7 @@ Util.getNav = async function (req, res, next) {
   });
   list += "</ul>";
   
-  console.log("Generated Nav HTML:", list);  // ← ADD THIS LINE HERE
+  console.log("Generated Nav HTML:", list);  // 
   
   return list;
 };
