@@ -7,9 +7,9 @@ const regValidate = require("../utilities/account-validation");
 // GET routes
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
-router.get("/", utilities.handleErrors(accountController.buildAccountManagement));  
+router.get("/", utilities.handleErrors(accountController.buildAccountManagement));  // ← MUST EXIST
 
-// POST route with validation
+// POST routes
 router.post(
   "/register",
   regValidate.registrationRules(),
@@ -17,7 +17,6 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 );
 
-// Process the login request - UPDATE THIS
 router.post(
   "/login",
   regValidate.loginRules(),

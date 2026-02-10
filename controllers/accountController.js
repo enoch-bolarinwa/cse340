@@ -17,9 +17,6 @@ async function buildLogin(req, res, next) {
   });
 }
 
-/* ****************************************
- *  Process login request
- * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
@@ -33,7 +30,7 @@ async function accountLogin(req, res) {
       errors: null,
       account_email,
     });
-    return;
+    return;  // ← IMPORTANT: Stop here
   }
   
   try {
@@ -47,7 +44,7 @@ async function accountLogin(req, res) {
         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
       }
       
-      return res.redirect("/account/");
+      return res.redirect("/account/");  // ← REDIRECT TO ACCOUNT MANAGEMENT
     } else {
       req.flash("notice", "Please check your credentials and try again.");
       res.status(400).render("account/login", {
@@ -97,6 +94,7 @@ async function registerAccount(req, res) {
 
   const { account_firstname, account_lastname, account_email, account_password } = req.body;
 
+  // Hash the password before storing
   let hashedPassword;
   try {
     hashedPassword = await bcrypt.hashSync(account_password, 10);
@@ -110,9 +108,10 @@ async function registerAccount(req, res) {
       account_lastname,
       account_email,
     });
-    return;
+    return;  
   }
 
+  // Store the new account with the hashed password
   try {
     const regResult = await accountModel.accountRegister(
       account_firstname,
@@ -122,10 +121,10 @@ async function registerAccount(req, res) {
     );
 
     if (regResult) {
-      req.flash("notice", 'Congratulations, your account has been created. Please log in.');
-      res.redirect("/account/login");
+      req.flash("notice", `Congratulations, you're registered ${account_firstname}. Please log in.`);
+      res.redirect("/account/login");  
     } else {
-      req.flash("notice", 'Sorry, registration failed. Please try again.');
+      req.flash("notice", "Sorry, the registration failed.");
       res.status(501).render("account/register", {
         title: "Registration",
         nav,
@@ -136,7 +135,7 @@ async function registerAccount(req, res) {
       });
     }
   } catch (error) {
-    req.flash("notice", 'Sorry, registration failed. Please try again.');
+    req.flash("notice", "Sorry, there was an error processing the registration.");
     res.status(500).render("account/register", {
       title: "Registration",
       nav,

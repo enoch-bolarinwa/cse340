@@ -30,16 +30,16 @@ accountModel.accountRegister = async function (
       (account_firstname, account_lastname, account_email, account_password, account_type) 
       VALUES ($1, $2, $3, $4, 'Client') 
       RETURNING *`;
-    const result = await pool.query(sql, [
+    
+    return await pool.query(sql, [
       account_firstname,
       account_lastname,
       account_email,
       account_password,
     ]);
-    return result.rows[0];
   } catch (error) {
     console.error("accountRegister error: " + error);
-    throw error;
+    return error.message;
   }
 };
 
