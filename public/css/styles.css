@@ -48,6 +48,43 @@ header, footer {
   background-color: #c82333;
 }
 
+/* Account Management Styles */
+.account-management {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.account-management h2 {
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.account-management p {
+  margin: 0.5rem 0;
+}
+
+.account-links {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.account-links a {
+  display: block;
+  padding: 1rem;
+  background-color: var(--secondary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.account-links a:hover {
+  background-color: var(--tertiary-color);
+}
+
 /* Login Form Styles */
 #loginForm {
   max-width: 450px;
