@@ -42,5 +42,26 @@ router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteCo
 // Route to process deletion
 router.post("/delete", utilities.handleErrors(invController.deleteInventory));
 
+// routes/inventoryRoute.js
+router.get("/add-classification", 
+  utilities.checkAccountType,  // Only Employee/Admin
+  inventoryController.buildAddClassification
+)
+
+router.get("/add-inventory", 
+  utilities.checkAccountType,
+  inventoryController.buildAddInventory
+)
+
+router.get("/edit/:inv_id", 
+  utilities.checkAccountType,
+  inventoryController.buildEditInventory
+)
+
+router.get("/delete/:inv_id", 
+  utilities.checkAccountType,
+  inventoryController.buildDeleteInventory
+)
+
 module.exports = router;
 
