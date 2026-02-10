@@ -98,9 +98,105 @@ const checkLoginData = async (req, res, next) => {
   next();
 };
 
+/* ========================================
+ * Update Account Validation Rules
+ * ======================================= */
+const updateAccountRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .isLength({ min: 2 })
+      .withMessage("First name must be at least 2 characters."),
+    
+    body("account_lastname")
+      .trim()
+      .isLength({ min: 2 })
+      .withMessage("Last name must be at least 2 characters."),
+    
+    body("account_email")
+      .trim()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required.")
+      .custom(async (account_email, { req }) => {
+        const account_id = req.body.account_id;
+        const account = await accountModel.checkExistingEmail(account_email);
+        if (account && account.account_id != account_id) {
+          throw new Error("Email exists. Please use a different email");
+        }
+      })
+  ];
+};
+
+/* ========================================
+ * Check update data
+ * ======================================= */
+const checkUpdateData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email } = req.body;
+  const errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    const accountData = await accountModel.getAccountById(req.body.account_id);
+    res.render("account/update", {
+      errors: errors.array(),
+      title: "Update Account",
+      nav,
+      account_firstname,
+      account_lastname,
+      account_email,
+      accountData
+    });
+    return;
+  }
+  next();
+};
+
+/* ========================================
+ * Password Validation Rules
+ * ======================================= */
+const passwordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements.")
+  ];
+};
+
+/* ========================================
+ * Check password data
+ * ======================================= */
+const checkPasswordData = async (req, res, next) => {
+  const errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    const accountData = await accountModel.getAccountById(req.body.account_id);
+    res.render("account/update", {
+      errors: errors.array(),
+      title: "Update Account",
+      nav,
+      accountData
+    });
+    return;
+  }
+  next();
+};
+
 module.exports = {
   registrationRules,
   checkRegistrationData,
   loginRules,
   checkLoginData,
+  updateAccountRules,
+  checkUpdateData,
+  passwordRules,
+  checkPasswordData,
 };

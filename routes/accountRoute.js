@@ -4,15 +4,9 @@ const accountController = require("../controllers/accountController");
 const utilities = require("../utilities/");
 const regValidate = require("../utilities/account-validation");
 
-// GET routes
+// Public routes
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
-router.get("/", utilities.handleErrors(accountController.buildAccountManagement));  
-router.get("/logout", accountController.logout)
-router.get("/account/", 
-  utilities.checkLogin,     
-  controller.buildView      
-)
 
 // POST routes
 router.post(
@@ -29,32 +23,33 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 );
 
-// Protected route (authentication required)
+// Protected routes (authentication required)
 router.get("/", 
-  utilities.checkLogin,              // ← Middleware checks if logged in
-  accountController.buildManagement  // ← Only runs if authenticated
-)
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountManagement)
+);
 
-// Get update view
+router.get("/logout", 
+  accountController.logout
+);
+
 router.get("/update/:account_id", 
   utilities.checkLogin,
-  accountController.buildUpdateView
-)
+  utilities.handleErrors(accountController.buildUpdateView)
+);
 
-// Process account update
 router.post("/update",
-  accountValidate.updateAccountRules(),
-  accountValidate.checkUpdateData,
   utilities.checkLogin,
-  accountController.updateAccount
-)
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+);
 
-// Process password change
 router.post("/update-password",
-  accountValidate.passwordRules(),
-  accountValidate.checkPasswordData,
   utilities.checkLogin,
-  accountController.updatePassword
-)
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+);
 
 module.exports = router;
