@@ -1,4 +1,7 @@
-
+/* ******************************************
+ * This server.js file is the primary file of the 
+ * application. It is used to control the project.
+ *******************************************/
 /* ***********************
  * Require Statements
  *************************/
@@ -12,23 +15,23 @@ const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require("./routes/accountRoute");
 const profileRoute = require("./routes/profileRoute");
 const utilities = require("./utilities/");
-const errorHandler = require("./middleware/errorHandler");
 const session = require("express-session")
 const pool = require('./database/')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 /* ***********************
- * Middleware
+ * Middleware - ORDER MATTERS!
  * ************************/
-// Body parser middleware - MUST COME EARLY
+
+// 1. Body parser FIRST - must parse form data before anything else
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Cookie parser middleware
+// 2. Cookie parser
 app.use(cookieParser());
 
-// Session middleware
+// 3. Session middleware
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -40,14 +43,14 @@ app.use(session({
   name: 'sessionId',
 }))
 
-// Express Messages Middleware
+// 4. Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
 
-// JWT check middleware
+// 5. JWT check middleware
 app.use(utilities.checkJWTToken);
 
 /* ***********************
@@ -55,7 +58,7 @@ app.use(utilities.checkJWTToken);
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout")
 
 /* ***********************
  * Routes
@@ -68,8 +71,8 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes
 app.use("/inv", inventoryRoute)
 
-// Account routes 
-app.use("/account", accountRoute);
+// Account routes - DO NOT WRAP THE ENTIRE ROUTE
+app.use("/account", accountRoute);  // ← CORRECT
 
 // Profile routes
 app.use("/profile", profileRoute);
