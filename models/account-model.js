@@ -1,11 +1,9 @@
 const pool = require("../database/");
 
-const accountModel = {};
-
 /* ........................................
 *  Check if email already exists
 * ..................................... */
-accountModel.checkExistingEmail = async function (account_email) {
+async function checkExistingEmail(account_email) {
   try {
     const sql = "SELECT account_email FROM public.account WHERE account_email = $1";
     const result = await pool.query(sql, [account_email]);
@@ -14,12 +12,12 @@ accountModel.checkExistingEmail = async function (account_email) {
     console.error("checkExistingEmail error: " + error);
     throw error;
   }
-};
+}
 
 /* ........................................
 *  Register new account
 * ..................................... */
-accountModel.accountRegister = async function (
+async function registerAccount(
   account_firstname,
   account_lastname,
   account_email,
@@ -38,16 +36,15 @@ accountModel.accountRegister = async function (
       account_password,
     ]);
   } catch (error) {
-    console.error("accountRegister error: " + error);
+    console.error("registerAccount error: " + error);
     return error.message;
   }
-};
-
+}
 
 /* *****************************
 * Return account data using email address
 * ***************************** */
-accountModel.getAccountByEmail = async function (account_email) {
+async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
       'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
@@ -57,33 +54,42 @@ accountModel.getAccountByEmail = async function (account_email) {
   } catch (error) {
     return new Error("No matching email found");
   }
-};
+}
 
 /* **********************
- *  Get account by ID
+ *  Get account data by account_id
  * ********************* */
 async function getAccountById(account_id) {
   try {
     const result = await pool.query(
       'SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM account WHERE account_id = $1',
       [account_id]
-    )
-    return result.rows[0]
+    );
+    return result.rows[0];
   } catch (error) {
-    return error.message
+    console.error("getAccountById error: " + error);
+    return null;
   }
 }
 
 /* **********************
- *  Update account info
+ *  Update account information
  * ********************* */
 async function updateAccount(account_firstname, account_lastname, account_email, account_id) {
   try {
-    const sql = "UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4 RETURNING *"
-    const data = await pool.query(sql, [account_firstname, account_lastname, account_email, account_id])
-    return data.rows[0]
+    const sql = `
+      UPDATE account 
+      SET account_firstname = $1, 
+          account_lastname = $2, 
+          account_email = $3 
+      WHERE account_id = $4 
+      RETURNING *`;
+    
+    const data = await pool.query(sql, [account_firstname, account_lastname, account_email, account_id]);
+    return data.rows[0];
   } catch (error) {
-    console.error("model error: " + error)
+    console.error("updateAccount error: " + error);
+    return null;
   }
 }
 
@@ -92,12 +98,25 @@ async function updateAccount(account_firstname, account_lastname, account_email,
  * ********************* */
 async function updatePassword(account_password, account_id) {
   try {
-    const sql = "UPDATE account SET account_password = $1 WHERE account_id = $2 RETURNING *"
-    const data = await pool.query(sql, [account_password, account_id])
-    return data.rows[0]
+    const sql = `
+      UPDATE account 
+      SET account_password = $1 
+      WHERE account_id = $2 
+      RETURNING *`;
+    
+    const data = await pool.query(sql, [account_password, account_id]);
+    return data.rows[0];
   } catch (error) {
-    console.error("model error: " + error)
+    console.error("updatePassword error: " + error);
+    return null;
   }
 }
 
-module.exports = accountModel;
+module.exports = {
+  registerAccount,
+  checkExistingEmail,
+  getAccountByEmail,
+  getAccountById,
+  updateAccount,
+  updatePassword,
+};

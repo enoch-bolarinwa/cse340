@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const utilities = require("../utilities/");
 const accountModel = require("../models/account-model");
+const activityModel = require("../models/activity-model");
 const jwt = require("jsonwebtoken");  
 require("dotenv").config();           
 
@@ -335,16 +336,183 @@ async function updatePassword(req, res, next) {
   }
 }
 
-// Don't forget to export them at the bottom
+/* ****************************************
+ *  Deliver account update view
+ * **************************************** */
+async function buildUpdateView(req, res, next) {
+  try {
+    let nav = await utilities.getNav();
+    const account_id = parseInt(req.params.account_id);
+    
+    if (res.locals.accountData.account_id !== account_id) {
+      req.flash("notice", "You can only edit your own account.");
+      return res.redirect("/account/");
+    }
+    
+    const accountData = await accountModel.getAccountById(account_id);
+    
+    res.render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      accountData
+    });
+  } catch (error) {
+    console.error("buildUpdateView error:", error);
+    req.flash("notice", "Error loading update page.");
+    res.redirect("/account/");
+  }
+}
+
+/* ****************************************
+ *  Process account update
+ * **************************************** */
+async function updateAccount(req, res, next) {
+  try {
+    let nav = await utilities.getNav();
+    const { account_firstname, account_lastname, account_email, account_id } = req.body;
+    const accountId = parseInt(account_id);
+    
+    if (res.locals.accountData.account_id !== accountId) {
+      req.flash("notice", "Unauthorized access.");
+      return res.redirect("/account/");
+    }
+    
+    const updateResult = await accountModel.updateAccount(
+      account_firstname,
+      account_lastname,
+      account_email,
+      accountId
+    );
+    
+    if (updateResult) {
+      await activityModel.logActivity(
+        accountId,
+        "account_update",
+        "Account information updated",
+        req.ip
+      );
+      
+      req.flash("notice", "Account updated successfully.");
+      const accountData = await accountModel.getAccountById(accountId);
+      res.render("account/management", {
+        title: "Account Management",
+        nav,
+        errors: null,
+        accountData
+      });
+    } else {
+      req.flash("notice", "Account update failed.");
+      res.status(501).render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        accountData: req.body
+      });
+    }
+  } catch (error) {
+    console.error("updateAccount error:", error);
+    req.flash("notice", "Error updating account.");
+    res.redirect("/account/");
+  }
+}
+
+/* ****************************************
+ *  Process password update
+ * **************************************** */
+async function updatePassword(req, res, next) {
+  try {
+    let nav = await utilities.getNav();
+    const { account_password, account_id } = req.body;
+    const accountId = parseInt(account_id);
+    
+    if (res.locals.accountData.account_id !== accountId) {
+      req.flash("notice", "Unauthorized access.");
+      return res.redirect("/account/");
+    }
+    
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(account_password, 10);
+    } catch (error) {
+      req.flash("notice", "Password hashing failed.");
+      const accountData = await accountModel.getAccountById(accountId);
+      return res.status(500).render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        accountData
+      });
+    }
+    
+    const updateResult = await accountModel.updatePassword(hashedPassword, accountId);
+    
+    if (updateResult) {
+      await activityModel.logActivity(
+        accountId,
+        "password_change",
+        "Password changed successfully",
+        req.ip
+      );
+      
+      req.flash("notice", "Password changed successfully.");
+      const accountData = await accountModel.getAccountById(accountId);
+      res.render("account/management", {
+        title: "Account Management",
+        nav,
+        errors: null,
+        accountData
+      });
+    } else {
+      req.flash("notice", "Password change failed.");
+      const accountData = await accountModel.getAccountById(accountId);
+      res.status(501).render("account/update", {
+        title: "Update Account",
+        nav,
+        errors: null,
+        accountData
+      });
+    }
+  } catch (error) {
+    console.error("updatePassword error:", error);
+    req.flash("notice", "Error changing password.");
+    res.redirect("/account/");
+  }
+}
+
+/* ****************************************
+ *  Process logout
+ * **************************************** */
+async function logout(req, res, next) {
+  try {
+    if (res.locals.loggedin && res.locals.accountData) {
+      await activityModel.logActivity(
+        res.locals.accountData.account_id,
+        "logout",
+        "User logged out",
+        req.ip
+      );
+    }
+    
+    res.clearCookie("jwt");
+    req.flash("notice", "You have been logged out.");
+    return res.redirect("/");
+  } catch (error) {
+    console.error("logout error:", error);
+    res.clearCookie("jwt");
+    return res.redirect("/");
+  }
+}
+
 module.exports = {
   buildLogin,
   buildRegister,
   registerAccount,
   accountLogin,
   buildAccountManagement,
-  logout,
-  buildUpdateView,  // Add
-  updateAccount,    // Add
-  updatePassword    // Add
+  buildUpdateView,    
+  updateAccount,      
+  updatePassword,     
+  logout
 };
 

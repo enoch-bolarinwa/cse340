@@ -1,0 +1,36 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<main>
+  <h1><%= title %></h1>
+  
+  <%- messages() %>
+  
+  <% if (activityData && activityData.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Date/Time</th>
+          <th>User</th>
+          <th>Activity</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% activityData.forEach(activity => { %>
+          <tr>
+            <td><%= new Date(activity.created_at).toLocaleString() %></td>
+            <td><%= activity.account_firstname %> <%= activity.account_lastname %></td>
+            <td><%= activity.activity_type %></td>
+            <td><%= activity.activity_description %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No activity logged yet.</p>
+  <% } %>
+</main>
+
+<%- include('../partials/footer') %>

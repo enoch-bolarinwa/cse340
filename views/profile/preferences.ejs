@@ -1,0 +1,46 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<main>
+  <h1><%= title %></h1>
+  
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="errors">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+  
+  <form action="/profile/preferences" method="post">
+    <label for="theme">Theme:</label>
+    <select id="theme" name="theme" required>
+      <option value="light" <%= (preferences && preferences.theme === 'light') ? 'selected' : '' %>>Light</option>
+      <option value="dark" <%= (preferences && preferences.theme === 'dark') ? 'selected' : '' %>>Dark</option>
+      <option value="auto" <%= (preferences && preferences.theme === 'auto') ? 'selected' : '' %>>Auto</option>
+    </select>
+    
+    <label for="language">Language:</label>
+    <select id="language" name="language" required>
+      <option value="en" <%= (preferences && preferences.language === 'en') ? 'selected' : '' %>>English</option>
+      <option value="es" <%= (preferences && preferences.language === 'es') ? 'selected' : '' %>>Español</option>
+    </select>
+    
+    <label>
+      <input type="checkbox" name="email_notifications" <%= (preferences && preferences.email_notifications) ? 'checked' : '' %>>
+      Email Notifications
+    </label>
+    
+    <label>
+      <input type="checkbox" name="sms_notifications" <%= (preferences && preferences.sms_notifications) ? 'checked' : '' %>>
+      SMS Notifications
+    </label>
+    
+    <button type="submit">Save Preferences</button>
+  </form>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,35 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<main>
+  <h1><%= title %></h1>
+  
+  <%- messages() %>
+  
+  <% if (errors) { %>
+    <ul class="errors">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+  
+  <form action="/profile/update" method="post">
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio" rows="5" maxlength="500"><%= locals.bio || profileData.bio || '' %></textarea>
+    
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" value="<%= locals.phone || profileData.phone || '' %>">
+    
+    <label for="date_of_birth">Date of Birth:</label>
+    <input type="date" id="date_of_birth" name="date_of_birth" 
+           value="<%= locals.date_of_birth || (profileData.date_of_birth ? new Date(profileData.date_of_birth).toISOString().split('T')[0] : '') %>">
+    
+    <input type="hidden" name="account_id" value="<%= profileData.account_id %>">
+    
+    <button type="submit">Update Profile</button>
+  </form>
+</main>
+
+<%- include('../partials/footer') %>

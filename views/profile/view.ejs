@@ -1,0 +1,47 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/navigation') %>
+
+<main>
+  <h1><%= title %></h1>
+  
+  <%- messages() %>
+  
+  <div class="profile-container">
+    <h2><%= profileData.account_firstname %> <%= profileData.account_lastname %></h2>
+    <p><strong>Email:</strong> <%= profileData.account_email %></p>
+    <p><strong>Account Type:</strong> <%= profileData.account_type %></p>
+    
+    <% if (profileData.bio) { %>
+      <p><strong>Bio:</strong> <%= profileData.bio %></p>
+    <% } %>
+    
+    <% if (profileData.phone) { %>
+      <p><strong>Phone:</strong> <%= profileData.phone %></p>
+    <% } %>
+    
+    <% if (locals.accountData && locals.accountData.account_id === profileData.account_id) { %>
+      <p>
+        <a href="/profile/edit/<%= profileData.account_id %>">Edit Profile</a> |
+        <a href="/account/update/<%= profileData.account_id %>">Update Account</a> |
+        <a href="/profile/preferences">Preferences</a>
+      </p>
+    <% } %>
+    
+    <h3>Recent Activity</h3>
+    <% if (activityData && activityData.length > 0) { %>
+      <ul>
+        <% activityData.forEach(activity => { %>
+          <li>
+            <%= activity.activity_type %>: <%= activity.activity_description %>
+            (<%= new Date(activity.created_at).toLocaleString() %>)
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No recent activity.</p>
+    <% } %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -166,7 +166,7 @@ const passwordRules = () => {
         minNumbers: 1,
         minSymbols: 1,
       })
-      .withMessage("Password does not meet requirements.")
+      .withMessage("Password must be at least 12 characters with uppercase, lowercase, number, and special character.")
   ];
 };
 

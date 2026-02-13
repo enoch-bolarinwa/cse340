@@ -52,4 +52,26 @@ router.post("/update-password",
   utilities.handleErrors(accountController.updatePassword)
 );
 
+// Get update view
+router.get("/update/:account_id", 
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdateView)
+);
+
+// Process account update
+router.post("/update",
+  utilities.checkLogin,
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+);
+
+// Process password change
+router.post("/update-password",
+  utilities.checkLogin,
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+);
+
 module.exports = router;

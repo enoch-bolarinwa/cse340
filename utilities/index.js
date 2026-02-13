@@ -181,5 +181,31 @@ Util.checkAccountType = (req, res, next) => {
   }
 }
 
+/* ****************************************
+ *  Check Admin Only
+ * **************************************** */
+Util.checkAdminOnly = (req, res, next) => {
+  if (res.locals.loggedin && res.locals.accountData.account_type === 'Admin') {
+    next();
+  } else {
+    req.flash("notice", "Admin access required.");
+    return res.redirect("/account/login");
+  }
+};
+
+/* ****************************************
+ *  Validate Request Parameters
+ * **************************************** */
+Util.validateId = (paramName) => {
+  return (req, res, next) => {
+    const id = parseInt(req.params[paramName]);
+    if (isNaN(id) || id <= 0) {
+      req.flash("notice", "Invalid ID provided.");
+      return res.redirect("/account/");
+    }
+    next();
+  };
+};
+
 
 module.exports = Util;

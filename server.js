@@ -19,6 +19,7 @@ const session = require("express-session")
 const pool = require('./database/')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const profileRoute = require("./routes/profileRoute");
 
 
 /* ***********************
@@ -85,6 +86,7 @@ app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'});
 });
 
+app.use("/profile", profileRoute);
 
 /* ***********************
  * Local Server Information
