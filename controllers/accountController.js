@@ -77,6 +77,8 @@ async function accountLogin(req, res) {
 async function buildAccountManagement(req, res, next) {
   let nav = await utilities.getNav();
   const accountData = res.locals.accountData;
+
+  
   res.render("account/management", {
     title: "Account Management",
     nav,

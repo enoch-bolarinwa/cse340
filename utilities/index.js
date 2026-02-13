@@ -172,8 +172,8 @@ Util.checkJWTToken = (req, res, next) => {
  * ************************************ */
 Util.checkAccountType = (req, res, next) => {
   if (res.locals.loggedin && 
-      (res.locals.accountData.account_type === 'Employee' || 
-       res.locals.accountData.account_type === 'Admin')) {
+      (res.locals.accountData.account_type === 'employee' || 
+       res.locals.accountData.account_type === 'admin')) {
     next()
   } else {
     req.flash("notice", "You do not have permission to access this resource.")
@@ -185,7 +185,7 @@ Util.checkAccountType = (req, res, next) => {
  *  Check Admin Only
  * **************************************** */
 Util.checkAdminOnly = (req, res, next) => {
-  if (res.locals.loggedin && res.locals.accountData.account_type === 'Admin') {
+  if (res.locals.loggedin && res.locals.accountData.account_type === 'admin') {
     next();
   } else {
     req.flash("notice", "Admin access required.");
