@@ -6,6 +6,22 @@
   <h1><%= title %></h1>
   
   <%- messages() %>
+
+  <!-- TEMPORARY DEBUG - REMOVE AFTER TESTING -->
+  <div style="background: #ffffcc; border: 2px solid #ff9900; padding: 15px; margin: 10px 0;">
+    <h3>🐛 DEBUG INFO:</h3>
+    <p><strong>Logged in:</strong> <%= locals.loggedin %></p>
+    <p><strong>Account Data exists:</strong> <%= locals.accountData ? 'YES' : 'NO' %></p>
+    <% if (locals.accountData) { %>
+      <p><strong>First Name:</strong> <%= accountData.account_firstname %></p>
+      <p><strong>Last Name:</strong> <%= accountData.account_lastname %></p>
+      <p><strong>Email:</strong> <%= accountData.account_email %></p>
+      <p><strong>Account Type:</strong> '<%= accountData.account_type %>'</p>
+      <p><strong>Account ID:</strong> <%= accountData.account_id %></p>
+    <% } else { %>
+      <p style="color: red;">❌ No account data available!</p>
+    <% } %>
+  </div>
   
   <% if (locals.loggedin && accountData) { %>
     <h2>Welcome <%= accountData.account_firstname %></h2>
